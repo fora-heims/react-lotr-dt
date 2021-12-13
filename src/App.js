@@ -23,14 +23,22 @@ function App() {
     const data = await resp.json();
     const fil = data.docs;
     const filmData = fil.map((f) => {
-      return [
-        f.name,
-        // FIX ME: the line below requires attention. one of the images is not shoeing up due to an excessive '-' at the end of a title
-        // NOTE: make sure you look at the response from the server - it may not be consistent
-        f.name.toLowerCase().replace(/\s+/g, '-'),
-        f.boxOfficeRevenueInMillions,
-        f.academyAwardNominations,
-      ];
+      if (f.name[f.name.length - 1] === ' ') {
+        return [
+          f.name,
+          // NOTE: make sure you look at the response from the server - it may not be consistent
+          f.name.toLowerCase().replace(/\s+/g, '-').slice(0, -1),
+          f.boxOfficeRevenueInMillions,
+          f.academyAwardNominations,
+        ];
+      } else {
+        return [
+          f.name,
+          f.name.toLowerCase().replace(/\s+/g, '-'),
+          f.boxOfficeRevenueInMillions,
+          f.academyAwardNominations,
+        ];
+      }
     });
     setFilms(filmData);
   };
