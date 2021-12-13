@@ -15,28 +15,27 @@ function App() {
   }, []);
 
   const getFilms = async () => {
-    const resp = await fetch('https://the-one-api.dev/v2/movie/', {
+    const resp = await fetch(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/films`, {
       headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+        apikey: process.env.REACT_APP_SUPABASE_KEY,
+        Authorization: `Bearer ${process.env.REACT_APP_SUPABASE_KEY}`,
       },
     });
     const data = await resp.json();
-    const fil = data.docs;
-    const filmData = fil.map((f) => {
-      if (f.name[f.name.length - 1] === ' ') {
+    const filmData = data.map((f) => {
+      if (f.title[f.title.length - 1] === ' ') {
         return [
-          f.name,
-          // NOTE: make sure you look at the response from the server - it may not be consistent
-          f.name.toLowerCase().replace(/\s+/g, '-').slice(0, -1),
-          f.boxOfficeRevenueInMillions,
-          f.academyAwardNominations,
+          f.title,
+          f.title.toLowerCase().replace(/\s+/g, '-').slice(0, -1),
+          f.box_office_totals,
+          f.academy_award_nominations,
         ];
       } else {
         return [
-          f.name,
-          f.name.toLowerCase().replace(/\s+/g, '-'),
-          f.boxOfficeRevenueInMillions,
-          f.academyAwardNominations,
+          f.title,
+          f.title.toLowerCase().replace(/\s+/g, '-'),
+          f.box_office_totals,
+          f.academy_award_nominations,
         ];
       }
     });
@@ -44,15 +43,15 @@ function App() {
   };
 
   const getCharacters = async () => {
-    const resp = await fetch('https://the-one-api.dev/v2/character/', {
+    const resp = await fetch(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/characters`, {
       headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+        apikey: process.env.REACT_APP_SUPABASE_KEY,
+        Authorization: `Bearer ${process.env.REACT_APP_SUPABASE_KEY}`,
       },
     });
     const data = await resp.json();
-    const char = data.docs;
-    const charData = char.map((c) => {
-      if (c.birth !== '' && c.death !== '') {
+    const charData = data.map((c) => {
+      if (c.birth !== 'Unknown' && c.death !== 'Unknown') {
         return { ...c, dates: `${c.birth} - ${c.death}` };
       } else {
         return { ...c, dates: `Unknown` };
