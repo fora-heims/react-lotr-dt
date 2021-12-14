@@ -23,21 +23,21 @@ function App() {
     });
     const data = await resp.json();
     const filmData = data.map((f) => {
-      if (f.title[f.title.length - 1] === ' ') {
-        return [
-          f.title,
-          f.title.toLowerCase().replace(/\s+/g, '-').slice(0, -1),
-          f.box_office_totals,
-          f.academy_award_nominations,
-        ];
-      } else {
-        return [
-          f.title,
-          f.title.toLowerCase().replace(/\s+/g, '-'),
-          f.box_office_totals,
-          f.academy_award_nominations,
-        ];
-      }
+      // if (f.title[f.title.length - 1] === ' ') {
+      //   return [
+      //     f.title,
+      //     f.title.toLowerCase().replace(/\s+/g, '-').slice(0, -1),
+      //     f.box_office_totals,
+      //     f.academy_award_nominations,
+      //   ];
+      // } else {
+      return [
+        f.title,
+        f.title.toLowerCase().replace(/\s+/g, '-'),
+        f.box_office_totals,
+        f.academy_award_nominations,
+      ];
+      // }
     });
     setFilms(filmData);
   };
@@ -51,11 +51,15 @@ function App() {
     });
     const data = await resp.json();
     const charData = data.map((c) => {
-      if (c.birth !== 'Unknown' && c.death !== 'Unknown') {
-        return { ...c, dates: `${c.birth} - ${c.death}` };
-      } else {
-        return { ...c, dates: `Unknown` };
-      }
+      // if (c.birth !== 'Unknown' && c.death !== 'Unknown') {
+      return {
+        ...c,
+        dates:
+          c.birth !== 'Unknown' && c.death !== 'Unknown' ? `${c.birth} - ${c.death}` : `Unknown`,
+      };
+      // } else {
+      //   return { ...c, dates: `Unknown` };
+      // }
     });
     setCharacters(charData);
   };
